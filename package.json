@@ -1,0 +1,36 @@
+{
+  "name": "stealth-connect",
+  "version": "1.0.0",
+  "description": "A MERN stack social network for devs, can be built upon to make any kind of social web app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server",
+    "server":"nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stealthman22/stealth-connect.git"
+  },
+  "keywords": [],
+  "author": "Alara Joel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stealthman22/stealth-connect/issues"
+  },
+  "homepage": "https://github.com/stealthman22/stealth-connect#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.2",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "gravatar": "^1.8.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.5"
+  }
+}
