@@ -1,12 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 const authentication = require('../../middleware/authentication')
 const User = require('../../models/User')
 const {check, validationResult} = require('express-validator')
 const config = require('../../config/default.json')
 
+
 // should be private
+// returning user object from db if auth passes
 router.get('/', authentication,  async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password')
@@ -20,6 +23,7 @@ router.get('/', authentication,  async (req, res) => {
 // @route POST api/auth
 // @desc Authenticate and log user in
 // @access Public : 
+//  Log in Logic after checking token and it's valid
 router.post('/', [check('email', 'Please enter a valid Email').isEmail(), check('password', 'Password is required').exists()],
 async (req, res) => {
     // check for erorrs in the body of request
@@ -28,14 +32,25 @@ async (req, res) => {
        return res.status(400).json({errors: errors.array()})
    }
 
+//    users login details
    const { email, password} = req.body
 
 try {
     // check if user exist
+    // this represents user object in database
     let user = await User.findOne({email:email})
-    if(user) {
-        return res.status(400).json({errors: [{msg:'Invalid credentials'}]})
+    if(!user) {
+        return res.status(400).json({errors: [{msg:'Invalid Credentials'}]})
     }
+
+// comparing user pwd against db's
+const isPwdMatch = await bcrypt.compare(password, user.password) 
+
+//  conditional logic for match
+if(!isPwdMatch) {
+    return res.status(400).json({errors: [{msg: 'Invalid Credentials'}]})
+}
+
     // return jwt
     const payload = await {
         user: {
@@ -45,8 +60,8 @@ try {
     // jwt config
     jwt.sign(payload, config.get('jwtSecret'), {expiresIn:36000}, (err, token) => {
         if(err) throw err
-    res.json(token)
-    })
+     res.json({token})
+     })
 } catch (err) {
     console.error(err.message)
     res.status(500).send('Server Error')
