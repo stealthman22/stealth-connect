@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const authentication = require('../../middleware/authentication')
 const User = require('../../models/User')
 const {check, validationResult} = require('express-validator')
-const config = require('../../config/default.json')
+const config = require('config')
 
 
 // should be private
