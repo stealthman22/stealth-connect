@@ -1,3 +1,4 @@
 {
-    "mongoURI" : "mongodb://localhost/stealthConnect"
+    "mongoURI" : "mongodb://localhost/stealthConnect",
+    "jwtSecret": "secretPass"
 }
