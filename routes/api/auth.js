@@ -26,7 +26,7 @@ router.get('/', authentication,  async (req, res) => {
 //  Log in Logic after checking token and it's valid
 router.post('/', [check('email', 'Please enter a valid Email').isEmail(), check('password', 'Password is required').exists()],
 async (req, res) => {
-    // check for erorrs in the body of request
+    // check for errors in the body of request
    const errors = validationResult(req)
    if(!errors.isEmpty()) {
        return res.status(400).json({errors: errors.array()})
