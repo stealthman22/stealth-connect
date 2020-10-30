@@ -1,6 +1,7 @@
 const express = require('express');
 const router =express.Router();
 const auth = require('../../middleware/authentication');
+const {check, validatorResult, validationResult} = require('express-validator')
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User')
@@ -8,7 +9,7 @@ const User = require('../../models/User')
 
 // @route   Get api/profile/me
 // @desc    Get user profile
-// @access  Private : (do we need an authentication for this route)
+// @access  Private : ( we need an authentication for this route i.e sending in a token)
 
 
 router.get('/me', auth,  async (req, res) => {
@@ -27,4 +28,21 @@ try {
 }
 });
 
-module.exports = router
+module.exports = router;
+
+// @route   Get api/profile/
+// @desc    Create user profile
+// @access  Private 
+
+router.post('/', auth, [check('status', 'This field is required').not().isEmpty(),
+check('skills', 'This field is required').not().isEmpty()],
+async (req, res) => {
+    const errors= validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(400).json({errors:errors.array()})
+    };
+    // profile creation logic
+
+    res.send('Profile created, ensure to update all fields')
+
+});
