@@ -19,7 +19,7 @@ name: {
    },
    status: {
        type:String,
-       required:true
+    //    required:true
    },
    skills: {
        type:[String],
@@ -91,10 +91,10 @@ social: {
     youtube: {
         type:String
     },
-    Facebook: {
+    facebook: {
         type:String
     },
-    Linkedin: {
+    linkedin: {
         type:String
     },
     Instagram: {
