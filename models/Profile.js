@@ -65,6 +65,10 @@ education: [
             type:String,
             required:true
         },
+        location: {
+            type:String,
+            required:true
+        },
         fieldOfStudy: {
             type:String,
             required:true
