@@ -61,7 +61,8 @@ const payload = await {
    }
 }
 // jwt configuration
-  jwt.sign(payload, config.get('jwtSecret'), {expiresIn:36000}, (err, token) => {
+// REMEMBER TO CHANGE TOKEN EXPIRATION TIME
+  jwt.sign(payload, config.get('jwtSecret'), {expiresIn:360000}, (err, token) => {
         if(err) throw err
     res.json({token})
     })
@@ -72,4 +73,4 @@ const payload = await {
 }
 )
 
-module.exports = router
+module.exports = router    

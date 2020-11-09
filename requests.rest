@@ -1,0 +1,17 @@
+# many request have been created in postman already
+# will add them later
+
+
+
+# login user
+POST http://localhost:6000/api/auth
+Content-Type: application/json
+
+{
+    "email": "tdotonline@gmail.com",
+    "password": "123456567890"
+}
+
+
+
+GET http://localhost:6000/api/profile/me

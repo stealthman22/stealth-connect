@@ -8,25 +8,29 @@ const {check, validationResult} = require('express-validator')
 const config = require('config')
 
 
-// should be private
-// returning user object from db if auth passes
+// @route    GET api/auth
+// @desc     Get user object 
+// @access  Public 
+
+// return user's data if token is valid
 router.get('/', authentication,  async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password')
-        res.json(user)
+       return res.json(user)
     } catch (err) {
         console.error(err.message)
         res.status(500).json({msg: 'Server Error'})
     } 
 })
 
-// @route POST api/auth
-// @desc Authenticate and log user in
-// @access Public : 
-//  Log in Logic after checking token and it's valid
+// @route    POST api/auth
+// @desc     Authenticate and log user in
+// @access  Public 
+
+//  Log in Logic after getting a valid token
 router.post('/', [check('email', 'Please enter a valid Email').isEmail(), check('password', 'Password is required').exists()],
 async (req, res) => {
-    // check for erorrs in the body of request
+    // check for errors in the body of request
    const errors = validationResult(req)
    if(!errors.isEmpty()) {
        return res.status(400).json({errors: errors.array()})

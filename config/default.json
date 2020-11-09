@@ -1,4 +1,6 @@
 {
     "mongoURI" : "mongodb://localhost/stealthConnect",
-    "jwtSecret": "secretPass"
+    "jwtSecret": "secretPass",
+    "githubClientId": "769817a612bff30f3ec7",
+    "githubSecret": "dd0da69d98fef2072561a29689c691046880f28a"
 }
