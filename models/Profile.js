@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const ProfileSchema = new mongoose.Schema({
-name: {
     // this links this schema to the user schema...
     // via object id
    user: {
@@ -30,8 +29,7 @@ name: {
    },
    githubUsername: {
        type:String 
-   }
-}, 
+   }, 
 experience: [
    { 
        title: {
@@ -98,6 +96,9 @@ social: {
         type:String
     },
     Instagram: {
+        type:String
+    },
+    twitter : {
         type:String
     }
 },
