@@ -17,7 +17,7 @@ router.get('/me', auth,  async (req, res) => {
 try {
     // getting info with the populate method 
         
-    const profile = await Profile.findOne({})
+    const profile = await Profile.findOne({user:req.user.id})
     // check if no profile
     if(!profile) {
         return res.status(400).json({msg:'There is no profile for this user'});
@@ -246,7 +246,7 @@ try {
 }
 });
 
-module.exports = router;
+
 
 
 
@@ -277,3 +277,4 @@ router.get('/github/:username', (req, res) => {
     }
 })
 
+module.exports = router;
