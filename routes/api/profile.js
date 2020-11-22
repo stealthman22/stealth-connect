@@ -15,14 +15,15 @@ const User = require('../../models/User')
 // @access  Private : ( we need an authentication for this route i.e sending in a token) 
 router.get('/me', auth,  async (req, res) => {
 try {
-    // getting info with the populate method 
-        
-    const profile = await Profile.findOne({user:req.user.id})
+    // getting info with the populate method   
+    const profile = await Profile.findOne({user:req.user.id}).populate('user', ['name', 'avatar' ])
     // check if no profile
+    console.log(auth.token)
     if(!profile) {
         return res.status(400).json({msg:'There is no profile for this user'});
     };
     res.json(profile)
+    console.log(profile)
 } catch (error) {
     console.error(error.message)
     res.status(500).json({msg:'Server Error'})

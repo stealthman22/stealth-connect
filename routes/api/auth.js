@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const authentication = require('../../middleware/authentication')
+const auth = require('../../middleware/authentication')
 const User = require('../../models/User')
 const {check, validationResult} = require('express-validator')
 const config = require('config')
@@ -13,7 +13,7 @@ const config = require('config')
 // @access  Public 
 
 // return user's data if token is valid
-router.get('/', authentication,  async (req, res) => {
+router.get('/', auth,  async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password')
        return res.json(user)
