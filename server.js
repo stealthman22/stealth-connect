@@ -20,9 +20,9 @@ app.get('/', (req, res) => res.send("API UP AND RUNNING"))
 
 // Define and access routes
 // users
-app.use('/api/users', require('./routes/api/users'))
+app.use('/api/user', require('./routes/api/user'))
 // posts
-app.use('/api/posts', require('./routes/api/posts'))
+app.use('/api/post', require('./routes/api/post'))
 // auth
 app.use('/api/auth', require('./routes/api/auth'))
 // profile
