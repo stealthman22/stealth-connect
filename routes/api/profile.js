@@ -29,7 +29,7 @@ try {
 }
 });
 
-// @route   Get api/profile/me
+// @route   Get api/profile/
 // @desc    Get all profiles
 // @access  Private 
 router.get('/', auth, async(req, res) => {
@@ -42,6 +42,19 @@ router.get('/', auth, async(req, res) => {
     }
 })
 
+
+// // @route   Get api/profile/:id
+// // @desc    Get  profile 
+// // @access  Private 
+// router.get('/:id', auth, async(req, res) => {
+//     try {
+//         const profile = await Profile.findById(req.params.id).sort({date: 1});
+//         return res.json(profile)
+//     } catch (error) {
+//         console.error(error.message);
+//         return res.status(500).send('This is our fault, not yours')
+//     }
+// })
 
 // @route   POST api/profile/
 // @desc    Create user profile

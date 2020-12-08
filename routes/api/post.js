@@ -39,7 +39,7 @@ try {
  res.status(500).send('This is our fault not yours')
 }
 })
-module.exports = router
+
 
 
 // @route  Post api/post
@@ -55,3 +55,90 @@ router.get('/', auth, async(req, res) => {
   res.status(500).send('This is our fault, not yours')
  }
 })
+
+// @route  Post api/posts/:id
+// @desc   Get  Posts by id
+// @access  Private
+router.get('/:id', auth, async(req, res) => {
+ try {
+  // sort posts from most recent
+  const post = await Post.findById(req.params.id).sort({date: -1})
+  
+  // check if posts exists
+  if(!post) {
+    res.status(404).json({msg: 'There are no posts for this user'})
+  }
+  return res.json(post)
+ } catch (error) {
+  console.error(error.message);
+  if(error.kind === 'ObjectId') {
+   return res.status(404).json({msg: 'There are no posts for this user'})
+  }
+  res.status(500).send('This is our fault, not yours')
+ }
+})
+
+// @route  Post api/post
+// @desc  Delete a  Post
+// @access  Private
+router.delete('/:id', auth, async(req, res) => {
+ try {
+  // sort posts from most recent
+  const post = await Post.findById(req.params.id)
+
+  // if post doesn't exist
+  if(!post) {
+   return res.status(404).json({msg: 'Post not found'})
+  }
+
+  // check user
+  // change post.user to a string else it will never match
+  if(post.user.toString() !== req.user.id) {
+return res.status(401).json({msg:'You are not authorized'})
+  }
+await post.remove()
+res.json({msg: 'Post removed'})
+   res.json(post)
+ } catch (error) {
+  console.error(error.message);
+  if(error.kind === 'ObjectId') {
+   return res.status(404).json({msg: 'Post not found'})
+  }
+  res.status(500).send('This is our fault, not yours')
+ }
+})
+
+
+// @route  Post api/post/like/:id
+// @desc  Add like to a Post
+// @access  Private
+router.put('/like/:id', auth, async(req, res) => {
+ try {
+  const post = await Post.findById(req.params.id);
+
+  // check if post has already been liked by user
+ if(post.likes.filter(like => 
+  like.user.toString() === req.user.id).length > 0) {
+  return res.status(400).json({msg: 'You have already liked this post'})
+ }
+
+ // else add like to likes array
+ post.likes.unshift({user: req.user.id});
+
+ await post.save();
+
+ // return updated likes array
+ res.json(post.likes)
+ } catch (error) {
+  console.error(error.message);
+  res.status(500)('This is our fault not yours')
+ }
+})
+
+
+
+
+
+
+
+module.exports = router
