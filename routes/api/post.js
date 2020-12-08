@@ -40,3 +40,18 @@ try {
 }
 })
 module.exports = router
+
+
+// @route  Post api/post
+// @desc   Get all  Posts
+// @access  Private
+router.get('/', auth, async(req, res) => {
+ try {
+  // sort posts from most recent
+  const posts = await Post.find().sort({date: -1})
+  return res.json(posts)
+ } catch (error) {
+  console.error(error.message);
+  res.status(500).send('This is our fault, not yours')
+ }
+})

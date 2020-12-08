@@ -3,7 +3,7 @@ const router =express.Router();
 const request = require('request');
 const config = require('config')
 const auth = require('../../middleware/authentication');
-const {check, validatorResult, validationResult} = require('express-validator');
+const {check, validationResult} = require('express-validator');
 
 
 const Profile = require('../../models/Profile');
@@ -29,10 +29,23 @@ try {
 }
 });
 
-// @route   Get api/profile/
+// @route   Get api/profile/me
+// @desc    Get all profiles
+// @access  Private 
+router.get('/', auth, async(req, res) => {
+    try {
+        const profiles = await Profile.find().sort({date: 1});
+        return res.json(profiles)
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).send('This is our fault, not yours')
+    }
+})
+
+
+// @route   POST api/profile/
 // @desc    Create user profile
 // @access  Private 
-
 router.post('/', auth, [check('status', 'This field is required').not().isEmpty(),
 check('skills', 'This field is required').not().isEmpty()],
 async (req, res) => {
