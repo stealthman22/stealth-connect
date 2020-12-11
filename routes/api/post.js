@@ -49,7 +49,7 @@ router.get('/', auth, async(req, res) => {
  try {
   // sort posts from most recent
   const posts = await Post.find().sort({date: -1})
-  return res.json(posts)
+   res.send(posts)
  } catch (error) {
   console.error(error.message);
   res.status(500).send('This is our fault, not yours')
@@ -57,9 +57,9 @@ router.get('/', auth, async(req, res) => {
 })
 
 // @route  Post api/posts/:id
-// @desc   Get  Posts by id
+// @desc   Get  Posts by specific user
 // @access  Private
-router.get('/:id', auth, async(req, res) => {
+router.get('/:id', auth, async (req, res) => {
  try {
   // sort posts from most recent
   const post = await Post.findById(req.params.id).sort({date: -1})
@@ -68,11 +68,11 @@ router.get('/:id', auth, async(req, res) => {
   if(!post) {
     res.status(404).json({msg: 'There are no posts for this user'})
   }
-  return res.json(post)
+  res.json(post)
  } catch (error) {
   console.error(error.message);
   if(error.kind === 'ObjectId') {
-   return res.status(404).json({msg: 'There are no posts for this user'})
+   return res.status(404).json({msg: 'There is no such user'})
   }
   res.status(500).send('This is our fault, not yours')
  }
@@ -136,9 +136,75 @@ router.put('/like/:id', auth, async(req, res) => {
 })
 
 
+// @route  Post api/post/like/:id
+// @desc  Remove like from a Post
+// @access  Private
+router.put('/unlike/:id', auth, async(req, res) => {
+ try {
+  const post = await Post.findById(req.params.id);
+
+  // check if post has never been liked by user
+ if(post.likes.some(like => 
+  like.user.toString() === req.user.id).length === 0) {
+  return res.status(400).json({msg: 'You have not liked this post'})
+ }
+
+ // Get remove index
+ //  grab the index of the like
+ const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id);
+
+ // remove the like
+ post.likes.splice(removeIndex, 1);
+
+ await post.save();
+
+ // return updated likes array
+ res.json(post.likes)
+ } catch (error) {
+  console.error(error.message);
+  res.status(500)('This is our fault not yours')
+ }
+})
 
 
+// @route  Post api/post/comment/:id
+// @desc   Comment on a post 
+// @access  Private
+router.post('/comment/:id', auth,
+check('text', 'Text is required').not().isEmpty(),
+async (req, res) => {
+const errors = validationResult(req);
+if (!errors.isEmpty()) {
+return res.status(400).json({errors: errors.array()})
+}
 
+try {
+ const user =  await User.findById(req.user.id).select('-password');
+
+//  find post being commented on
+const post = await Post.findById(req.params.id);
+
+// Create new comment
+ const newComment =  {
+  text: req.body.text,
+  user: req.user.id,
+  name: user.name,
+  avatar: user.avatar,
+ };
+
+// Add new comment
+post.comments.unshift(newComment);
+
+// Save post to db after creating it
+  await post.save();
+ 
+// return the comment array for that post
+ return res.json(post.comments)
+} catch (error) {
+ console.error(error.message);
+ res.status(500).send('This is our fault not yours')
+}
+})
 
 
 module.exports = router

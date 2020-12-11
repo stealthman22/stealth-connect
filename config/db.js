@@ -8,7 +8,7 @@ const db = config.get('mongoURI')
 // set promise
 // mongoose.Promise = global.Promise
 
-const connectDB= async() => { 
+const connectDB = async() => { 
     try {
         await mongoose.connect(db, {
             useNewUrlParser: true,
