@@ -56,7 +56,7 @@ if(!isPwdMatch) {
 }
 
     // return jwt
-    const payload = await {
+    const payload =  {
         user: {
             id: user.id
         }

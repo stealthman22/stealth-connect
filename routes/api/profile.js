@@ -35,6 +35,10 @@ try {
 router.get('/', auth, async(req, res) => {
     try {
         const profiles = await Profile.find().sort({date: 1});
+        // check if no profile
+        if(!profiles) {
+            return res.status(400).json({msg:'There are no profiles'});
+        };
         return res.json(profiles)
     } catch (error) {
         console.error(error.message);

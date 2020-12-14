@@ -33,7 +33,7 @@ comments: [
    ref: 'user'
   },
   text: {
-   types: String,
+   type: String,
  
   },
   avatar: {

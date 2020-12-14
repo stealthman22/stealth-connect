@@ -55,7 +55,8 @@ user.password = await bcrypt.hash(password, salt)
 await user.save()
 
 // 4 Return jwt 
-const payload = await {
+// this should not be await
+const payload =  {
    user: {
       id:user.id
    }
