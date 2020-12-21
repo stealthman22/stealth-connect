@@ -277,7 +277,7 @@ try {
 }
 });
 
-module.exports = router;
+
 
 
 
@@ -308,3 +308,4 @@ router.get('/github/:username', (req, res) => {
     }
 })
 
+module.exports = router;
